@@ -1,6 +1,8 @@
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
+
 import {
+  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -15,7 +17,7 @@ import { isTokenValid, logout } from "@/utils/auth";
 export default function DetailPesanan() {
   const [loading, setLoading] = useState(true);
 
-  const { cartItems } = useCart();
+  const { cartItems, removeFromCart } = useCart();
 
   useEffect(() => {
     const checkToken = async () => {
@@ -36,9 +38,29 @@ export default function DetailPesanan() {
     router.replace("/login");
   };
 
+  const handleDeleteItem = (index: number) => {
+    Alert.alert(
+      "Hapus Item",
+      "Apakah kamu yakin ingin menghapus item ini?",
+      [
+        {
+          text: "Batal",
+          style: "cancel",
+        },
+        {
+          text: "Hapus",
+          style: "destructive",
+          onPress: () => removeFromCart(index),
+        },
+      ]
+    );
+  };
+
   const totalPrice = cartItems.reduce((total, item) => {
     const numericPrice = parseInt(
-      item.price.replace("Rp ", "").replace(".", "")
+      item.price
+        .replace("Rp ", "")
+        .replace(/\./g, "")
     );
 
     return total + numericPrice;
@@ -54,7 +76,9 @@ export default function DetailPesanan() {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Detail Pesanan</Text>
+      <Text style={styles.title}>
+        Detail Pesanan
+      </Text>
 
       {cartItems.length === 0 ? (
         <View style={styles.emptyContainer}>
@@ -66,10 +90,14 @@ export default function DetailPesanan() {
         <>
           <FlatList
             data={cartItems}
-            keyExtractor={(item, index) => `${item.id}-${index}`}
+            keyExtractor={(item, index) =>
+              `${item.id}-${index}`
+            }
             showsVerticalScrollIndicator={false}
-            contentContainerStyle={{ paddingBottom: 20 }}
-            renderItem={({ item }) => (
+            contentContainerStyle={{
+              paddingBottom: 20,
+            }}
+            renderItem={({ item, index }) => (
               <View style={styles.card}>
                 <Image
                   source={{ uri: item.image }}
@@ -88,6 +116,17 @@ export default function DetailPesanan() {
                   <Text style={styles.price}>
                     {item.price}
                   </Text>
+
+                  <TouchableOpacity
+                    style={styles.deleteButton}
+                    onPress={() =>
+                      handleDeleteItem(index)
+                    }
+                  >
+                    <Text style={styles.deleteText}>
+                      Remove Item
+                    </Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             )}
@@ -99,7 +138,8 @@ export default function DetailPesanan() {
             </Text>
 
             <Text style={styles.totalPrice}>
-              Total Harga: Rp {totalPrice.toLocaleString("id-ID")}
+              Total Harga: Rp{" "}
+              {totalPrice.toLocaleString("id-ID")}
             </Text>
           </View>
         </>
@@ -175,6 +215,20 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     color: "#FF6B3D",
     marginTop: 10,
+  },
+
+  deleteButton: {
+    backgroundColor: "#FFE5E0",
+    paddingVertical: 8,
+    borderRadius: 14,
+    marginTop: 12,
+    alignItems: "center",
+  },
+
+  deleteText: {
+    color: "#FF4D4D",
+    fontWeight: "700",
+    fontSize: 13,
   },
 
   summaryCard: {

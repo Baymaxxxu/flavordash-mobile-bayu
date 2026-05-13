@@ -1,4 +1,10 @@
-import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
 type FoodProps = {
   item: {
@@ -15,22 +21,39 @@ type FoodProps = {
 export default function FoodCard({ item }: FoodProps) {
   return (
     <View style={styles.card}>
-      <Image source={{ uri: item.image }} style={styles.foodImage} />
+      <Image
+        source={{ uri: item.image }}
+        style={styles.foodImage}
+      />
 
       <View style={styles.foodInfo}>
         <View style={styles.topRow}>
-          <Text style={styles.category}>{item.category}</Text>
-          <Text style={styles.rating}>⭐ {item.rating}</Text>
+          <Text style={styles.category}>
+            {item.category}
+          </Text>
+
+          <Text style={styles.rating}>
+            ⭐ {item.rating}
+          </Text>
         </View>
 
-        <Text style={styles.foodName}>{item.name}</Text>
-        <Text style={styles.foodDescription}>{item.description}</Text>
+        <Text style={styles.foodName}>
+          {item.name}
+        </Text>
+
+        <Text style={styles.foodDescription}>
+          {item.description}
+        </Text>
 
         <View style={styles.bottomRow}>
-          <Text style={styles.foodPrice}>{item.price}</Text>
+          <Text style={styles.foodPrice}>
+            {item.price}
+          </Text>
 
           <TouchableOpacity style={styles.orderButton}>
-            <Text style={styles.orderText}>Order</Text>
+            <Text style={styles.orderText}>
+              Add
+            </Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -40,93 +63,74 @@ export default function FoodCard({ item }: FoodProps) {
 
 const styles = StyleSheet.create({
   card: {
-    flexDirection: "row",
-    backgroundColor: "#FFFFFF",
-    borderRadius: 18,
-    padding: 12,
-    marginBottom: 16,
-    alignItems: "center",
-    elevation: 5,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    shadowOffset: {
-      width: 0,
-      height: 4,
-    },
+    backgroundColor: "#FFF",
+    borderRadius: 24,
+    padding: 14,
+    marginBottom: 18,
   },
 
   foodImage: {
-    width: "34%",
-    aspectRatio: 1,
-    borderRadius: 16,
-    backgroundColor: "#EEEEEE",
+    width: "100%",
+    height: 180,
+    borderRadius: 20,
   },
 
   foodInfo: {
-    flex: 1,
-    marginLeft: 14,
+    marginTop: 14,
   },
 
   topRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
   },
 
   category: {
-    fontSize: 11,
-    color: "#FF7043",
-    fontWeight: "bold",
-    backgroundColor: "#FFF0E8",
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 20,
+    color: "#FF6B3D",
+    fontWeight: "600",
+    fontSize: 12,
   },
 
   rating: {
-    fontSize: 12,
     color: "#444",
-    fontWeight: "600",
+    fontSize: 13,
   },
 
   foodName: {
-    fontSize: 17,
-    fontWeight: "bold",
+    fontSize: 22,
+    fontWeight: "700",
     color: "#222",
     marginTop: 8,
   },
 
   foodDescription: {
-    fontSize: 13,
-    color: "#666",
-    marginTop: 5,
-    lineHeight: 18,
+    color: "#777",
+    marginTop: 6,
+    lineHeight: 20,
+    fontSize: 14,
   },
 
   bottomRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginTop: 10,
+    marginTop: 18,
   },
 
   foodPrice: {
-    fontSize: 15,
-    fontWeight: "bold",
-    color: "#FF7043",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#222",
   },
 
   orderButton: {
-    backgroundColor: "#FF7043",
-    paddingHorizontal: 14,
-    paddingVertical: 7,
-    borderRadius: 20,
+    backgroundColor: "#222",
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 18,
   },
 
   orderText: {
-    color: "#FFFFFF",
-    fontSize: 12,
-    fontWeight: "bold",
+    color: "#FFF",
+    fontWeight: "600",
   },
 });

@@ -1,10 +1,13 @@
 import {
+  Alert,
   Image,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from "react-native";
+
+import { useCart } from "@/contexts/CartContext";
 
 type FoodProps = {
   item: {
@@ -19,41 +22,37 @@ type FoodProps = {
 };
 
 export default function FoodCard({ item }: FoodProps) {
+  const { addToCart } = useCart();
+
+  const handleAddToCart = () => {
+    addToCart(item);
+    Alert.alert("Berhasil", `${item.name} ditambahkan ke cart`);
+  };
+
   return (
     <View style={styles.card}>
-      <Image
-        source={{ uri: item.image }}
-        style={styles.foodImage}
-      />
+      <Image source={{ uri: item.image }} style={styles.foodImage} />
 
       <View style={styles.foodInfo}>
         <View style={styles.topRow}>
-          <Text style={styles.category}>
-            {item.category}
-          </Text>
-
-          <Text style={styles.rating}>
-            ⭐ {item.rating}
-          </Text>
+          <Text style={styles.category}>{item.category}</Text>
+          <Text style={styles.rating}>⭐ {item.rating}</Text>
         </View>
 
-        <Text style={styles.foodName}>
-          {item.name}
-        </Text>
+        <Text style={styles.foodName}>{item.name}</Text>
 
         <Text style={styles.foodDescription}>
           {item.description}
         </Text>
 
         <View style={styles.bottomRow}>
-          <Text style={styles.foodPrice}>
-            {item.price}
-          </Text>
+          <Text style={styles.foodPrice}>{item.price}</Text>
 
-          <TouchableOpacity style={styles.orderButton}>
-            <Text style={styles.orderText}>
-              Add
-            </Text>
+          <TouchableOpacity
+            style={styles.orderButton}
+            onPress={handleAddToCart}
+          >
+            <Text style={styles.orderText}>Add</Text>
           </TouchableOpacity>
         </View>
       </View>

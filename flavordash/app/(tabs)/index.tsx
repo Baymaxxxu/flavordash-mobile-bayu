@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   FlatList,
   SafeAreaView,
@@ -13,39 +14,38 @@ import { router } from "expo-router";
 
 import FoodCard from "@/components/FoodCard";
 import { foods } from "@/constants/foods";
+import { useCart } from "@/contexts/CartContext";
 
-const categories = [
-  "All",
-  "Burger",
-  "Pizza",
-  "Sushi",
-  "Coffee",
-];
+const categories = ["All", "Burger", "Pizza", "Sushi", "Coffee"];
 
 export default function HomeScreen() {
+  const [searchText, setSearchText] = useState("");
+  const { cartItems } = useCart();
+
+  const filteredFoods = foods.filter((food) =>
+    food.name.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
-        <View>
-          <Text style={styles.greeting}>Hello Bayu 👋</Text>
+        <Text style={styles.greeting}>Hello Bayu 👋</Text>
 
-          <Text style={styles.title}>
-            Find Your Favorite Food
-          </Text>
-        </View>
+        <Text style={styles.title}>
+          Find Your Favorite Food
+        </Text>
       </View>
 
-      {/* Search */}
       <View style={styles.searchContainer}>
         <TextInput
           placeholder="Search food..."
           placeholderTextColor="#999"
           style={styles.searchInput}
+          value={searchText}
+          onChangeText={setSearchText}
         />
       </View>
 
-      {/* Categories */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
@@ -71,23 +71,26 @@ export default function HomeScreen() {
         ))}
       </ScrollView>
 
-      {/* Protected Route Button */}
       <TouchableOpacity
         style={styles.detailButton}
         onPress={() => router.push("/detail-pesanan")}
       >
         <Text style={styles.detailButtonText}>
-          View Order Detail
+          View Order Detail ({cartItems.length})
         </Text>
       </TouchableOpacity>
 
-      {/* Food List */}
       <FlatList
-        data={foods}
+        data={filteredFoods}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <FoodCard item={item} />}
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
+        ListEmptyComponent={
+          <Text style={styles.emptyText}>
+            Food not found
+          </Text>
+        }
       />
     </SafeAreaView>
   );
@@ -178,5 +181,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingTop: 20,
     paddingBottom: 40,
+  },
+
+  emptyText: {
+    textAlign: "center",
+    color: "#777",
+    marginTop: 40,
+    fontSize: 15,
   },
 });

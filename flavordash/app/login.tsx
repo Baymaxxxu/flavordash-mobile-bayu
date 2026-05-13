@@ -1,30 +1,68 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { router } from "expo-router";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 
-const TOKEN_KEY = "flavordash_token";
+import { login } from "@/utils/auth";
 
-const mockJwtToken =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMjMiLCJuYW1lIjoiQmF5dSIsImV4cCI6MTg5MzQ1NjAwMH0.signature";
+export default function LoginScreen() {
+  const handleLogin = async () => {
+    await login();
 
-export const login = async () => {
-  await AsyncStorage.setItem(TOKEN_KEY, mockJwtToken);
-};
+    router.replace("/detail-pesanan");
+  };
 
-export const logout = async () => {
-  await AsyncStorage.removeItem(TOKEN_KEY);
-};
+  return (
+    <View style={styles.container}>
+      <Text style={styles.title}>FlavorDash Login</Text>
 
-export const getToken = async () => {
-  return await AsyncStorage.getItem(TOKEN_KEY);
-};
+      <Text style={styles.subtitle}>
+        Login untuk melihat detail pesanan
+      </Text>
 
-export const isTokenValid = async () => {
-  const token = await getToken();
+      <TouchableOpacity
+        style={styles.button}
+        onPress={handleLogin}
+      >
+        <Text style={styles.buttonText}>Login</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
 
-  if (!token) {
-    return false;
-  }
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#FFF7F2",
+    justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+  },
 
-  const parts = token.split(".");
+  title: {
+    fontSize: 30,
+    fontWeight: "bold",
+    color: "#FF7043",
+  },
 
-  return parts.length === 3;
-};
+  subtitle: {
+    marginTop: 10,
+    color: "#666",
+    marginBottom: 24,
+  },
+
+  button: {
+    backgroundColor: "#FF7043",
+    paddingHorizontal: 32,
+    paddingVertical: 14,
+    borderRadius: 24,
+  },
+
+  buttonText: {
+    color: "#FFF",
+    fontWeight: "bold",
+  },
+});
